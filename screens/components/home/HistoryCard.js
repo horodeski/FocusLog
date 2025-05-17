@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export default function Card() {
+export default function RecentCard() {
 	return (
 		<View style={styles.card}>
 			<View style={styles.icon} />
@@ -18,10 +18,7 @@ export default function Card() {
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#282A2C",
-		padding: 10,
 		width: "100%",
-		borderRadius: 8,
 		marginVertical: 8,
 		flexDirection: "row",
 		alignItems: "center",
@@ -29,26 +26,23 @@ const styles = StyleSheet.create({
 	},
 	icon: {
 		backgroundColor: "#D9D9D9",
-		width: 50,
-		height: 50,
-		borderRadius: 8
+		width: 60,
+		height: 60,
+		borderRadius: 4
 	},
 	content: {
 		flex: 1,
-		flexShrink: 1,
+		flexShrink: 1
 	},
 	title: {
 		fontSize: 15,
-		color: "#edf0ce",
-		marginBottom: 5,
+		marginBottom: 2,
 		fontWeight: "bold"
 	},
 	description: {
-		fontSize: 13,
-		color: "#edf0ce"
+		fontSize: 13
 	},
 	duration: {
-		fontSize: 13,
-		color: "#edf0ce"
+		fontSize: 13
 	}
 });

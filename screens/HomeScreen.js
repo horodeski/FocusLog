@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, ScrollView, StyleSheet, ImageBackground, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Card from "./components/home/Card";
+import HistoryCard from "./components/home/HistoryCard";
 import Header from "./components/home/Header";
+import ActivityCard from "./components/home/ActivityCard";
+
+const screenHeight = Dimensions.get("window").height;
 
 export default function HomeScreen({ navigation }) {
 	const [habits, setHabits] = useState([]);
@@ -16,35 +19,33 @@ export default function HomeScreen({ navigation }) {
 		return unsubscribe;
 	}, [navigation]);
 
-	const toggleHabit = async (index) => {
-		const updated = [...habits];
-		updated[index].done = !updated[index].done;
-		setHabits(updated);
-		await AsyncStorage.setItem("@habits", JSON.stringify(updated));
-	};
-
 	return (
 		<ImageBackground source={require("../assets/Home.png")} style={styles.background} resizeMode="cover">
-			<View style={styles.container}>
+			<ScrollView
+				contentContainerStyle={styles.container}
+				showsVerticalScrollIndicator={false}
+				style={{ marginBottom: 150 }} 
+			>
 				<Header />
-				{/* 				<FlatList
-					data={habits}
-					keyExtractor={(item, index) => index.toString()}
-					renderItem={({ item, index }) => (
-						<TouchableOpacity onPress={() => toggleHabit(index)}>
-							<Text style={item.done ? styles.done : styles.habit}>{item.name}</Text>
-						</TouchableOpacity>
-					)}
-				/> */}
-				<View style={{ flexDirection: "column", backgroundColor: "#1E202190", padding: 20, borderRadius: 10 }}>
-					<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-						<Text style={{ color: "#edf0ce", fontWeight: 500 }}>Atividades Recentes</Text>
-            <Text style={{ color: "#edf0ce", fontWeight: 500 }}>Ver todas ></Text>
+				<View style={styles.activitiesContainer}>
+					<View style={styles.activitiesHeader}>
+						<Text style={styles.activitiesTitle}>Suas atividades</Text>
+						<Text style={styles.activitiesTitle}>Ver todas</Text>
 					</View>
-					<Card />
-					<Card />
+					<View style={styles.activitiesCards}>
+						<ActivityCard />
+						<ActivityCard />
+					</View>
 				</View>
-				<Button title="Adicionar Hábito" onPress={() => navigation.navigate("Novo Hábito")} />
+			</ScrollView>
+			<View style={styles.historyContainer}>
+				<View style={styles.historyHeader}>
+					<Text style={styles.historyTitle}>Histórico</Text>
+					<Text >Ver tudo</Text>
+				</View>
+				<HistoryCard />
+				<HistoryCard />
+				<HistoryCard />
 			</View>
 		</ImageBackground>
 	);
@@ -52,7 +53,53 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
 	background: { flex: 1 },
-	container: { flex: 1, padding: 20 },
-	habit: { fontSize: 18, padding: 10 },
-	done: { fontSize: 18, padding: 10, textDecorationLine: "line-through", color: "gray" }
+	container: {
+		padding: 20,
+	},
+	activitiesContainer: {
+		backgroundColor: "#1E202190",
+		padding: 20,
+		marginBottom: 20,
+		borderRadius: 20,
+	},
+	activitiesHeader: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: 20,
+	},
+	activitiesTitle: {
+		color: "#edf0ce",
+		fontWeight: "500",
+	},
+	activitiesCards: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		flexWrap: "wrap",
+	},
+	historyContainer: {
+		position: "absolute",
+		bottom: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: "#fff",
+		padding: 20,
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+		height: 320,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: -2 },
+		shadowOpacity: 0.3,
+		shadowRadius: 3,
+		elevation: 5,
+	},
+	historyHeader: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		marginBottom: 10,
+	},
+	historyTitle: {
+		fontWeight: "500",
+		fontSize: 20,
+	},
 });
